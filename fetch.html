@@ -11,6 +11,7 @@
 <body>
     <h1 class="header">Fetch</h1>
     <div class="title"></div>
+    <div class="update"></div>
     <h4></h4>
     <ul></ul>
     
@@ -25,9 +26,42 @@
     ********************************************************/
 
     //建立FETCH請求及實質內容
+    fetch('https://kktix.com/events.json',{method:'get'})
+    .then(function(response){
+        return response.json()  //取得response
+    }).then(function(data){     //將上方得到的json放到function(data)
+        console.log(data)
+        // document.querySelector(".title").innerHTML=data.title;       //取得data內的title
+        // document.querySelector(".update").innerHTML=data.updated;    //取得data內的updated
+        // let events=data.entry;
+        // let str=""; 
+        // events.forEach(function(event,index){
+        //     str=str+`<li>${event.title}</li>`;
+        // })
+        // document.querySelector('ul').innerHTML=str;
+
+    //////////////////// type 2 ///////////////////////
+        renderList(data)
+    })     
+    .catch(function(err){
+        console.log(err)
+    })
 
 
+    //////////////////// type 2 ///////////////////////
+    function renderList(response){
+        document.querySelector(".title").innerHTML=response.title;       //取得response內的title
+        document.querySelector(".update").innerHTML=response.updated;    //取得response內的updated
+        let events=response.entry;
+        let str=""; 
+        events.forEach(function(event,index){
+            str=str+`<li>${event.title}</li>`;
+        })
+        document.querySelector('ul').innerHTML=str;
+    } 
     //建立回呼函式(call back function)來處理回應時的各項行為
+
+
 
 
     //建立錯誤處理

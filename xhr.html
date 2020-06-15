@@ -11,8 +11,12 @@
 <body>
     <h1 class="header">XMLHttpRequest</h1>
     <div class="title"></div>
+    <hr>
+    <div class="update"></div>
     <h4></h4>
-    <ul></ul>
+    <ul>
+    </ul>
+    <div class="footer"></div>
 
 </body>
 </html>
@@ -26,14 +30,39 @@
     ********************************************************/
 
     //宣告一個XMLHttpRequest物件
-
+    let xhr=new XMLHttpRequest;
 
     //建立請求的各項設定及實質內容
-
+    xhr.open(
+    'GET',  //取得使用GET,更改使用POST
+    "https:kktix.com/events.json",
+    true
+    );
 
     //建立得到回應時的各項設定及行為
+    xhr.onload=function(){      //當xhr有東西載入時要做哪些事情  :onload為拿到資料的地方
+        let type=xhr.getAllResponseHeaders("Content-Type");    //回傳物件檔頭類型
+        let response=xhr.responseText;       //取得的資料格式為{純文字}的東西
+        let res=JSON.parse(response);       //使用JSON.parse來解析response的回應
+        console.log(res);
+        document.querySelector(".title").innerHTML=res.title;       //取得res內的title
+        document.querySelector(".update").innerHTML=res.updated;    //取得res內的updated
+        let events=res.entry;
+        
+        // 先來個小測試
+        // let str="";
+        // str="<li>今日は天気がいいね！　お元気ですか？　頑張りましょう！<li>";
+        // document.getElementsByTagName('ul')[0].innerHTML=str;    //找到TagName為('ul')的第幾個位置
+        
+        let str=""; 
+        events.forEach(function(event,index){
+            str=str+`<li>${event.title}</li>`;
+        })
+        document.querySelector('ul').innerHTML=str;
 
+    }
 
     //送出請求
-
+    document.querySelector(".footer").innerHTML="這是頁尾";
+    xhr.send();
     </script>

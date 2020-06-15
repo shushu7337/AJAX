@@ -8,10 +8,12 @@
     <link rel="shortcut icon" href="#" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
       <!-------引入jQuery函式庫------->
+      <script src="jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <h1 class="header">jQuery</h1>
     <div class="title"></div>
+    <div class="update"></div>
     <h4></h4>
     <ul></ul>
     
@@ -26,17 +28,34 @@
     ********************************************************/
      
     //利用$.ajax()方法傳送請求並取得回應
-    /* $.ajax(
+    // 使用jquery.ajax || $.ajax都可以
+    $.ajax(
       {
-        url:'',
-        type:'',
-        success:,
-        error:,
-        complete:
+        url:'https://kktix.com/events.json',
+        type:'get',
+        success:function(response){   //成功後要做甚麼事情
+          console.log(response)
+          renderList(response)
+        },  
+        error:function(err){
+          console.log(err)
+        },
+        complete:function(xhr,status){
+          console.log("status:"+status)
+        },
       }
-    ) */   
+    ) 
 
-    
+    function renderList(response){
+        document.querySelector(".title").innerHTML=response.title;       //取得response內的title
+        document.querySelector(".update").innerHTML=response.updated;    //取得response內的updated
+        let events=response.entry;
+        let str=""; 
+        events.forEach(function(event,index){
+            str=str+`<li>${event.title}</li>`;
+        })
+        document.querySelector('ul').innerHTML=str;
+    } 
     //利用$.get()方法傳送請求並取得回應
 
 

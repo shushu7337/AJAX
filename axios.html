@@ -8,10 +8,12 @@
     <link rel="shortcut icon" href="#" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <!-----引入axios函式庫------->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
 </head>
 <body>
     <h1 class="header">axios</h1>
     <div class="title"></div>
+    <div class="update"></div>
     <h4></h4>
     <ul></ul>
     
@@ -26,11 +28,29 @@
 ********************************************************/
 
 //發起一個axios請求
-
-
+axios.get('https://kktix.com/events.json')
+.then(function(response){
+    console.log(response)
+    renderList(response)
+})
+.catch(function(err){
+    console.log(err)
+})
 //建立回呼函式(call back function)來處理回應時的各項行為
 
 
 //建立錯誤處理
 
+
+function renderList(response){
+    // 注意axios撈出來的api與前面三者的結構有些許不同，外層多一個data去做包覆
+        document.querySelector(".title").innerHTML=response.data.title;       //取得response內的title
+        document.querySelector(".update").innerHTML=response.data.updated;    //取得response內的updated
+        let events=response.data.entry;
+        let str=""; 
+        events.forEach(function(event,index){
+            str=str+`<li>${event.title}</li>`;
+        })
+        document.querySelector('ul').innerHTML=str;
+    } 
 </script>
