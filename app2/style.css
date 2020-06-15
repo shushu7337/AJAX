@@ -7,10 +7,16 @@
     box-sizing: border-box;
     text-decoration: none;
 }
-
 .header{
     margin:10px auto;
     padding:10px;
     text-align: center;
     font-size:32px;
 }
+.ff{
+    text-align: center;
+}
+.create{
+    text-align:center;
+}
+
