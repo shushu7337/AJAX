@@ -29,22 +29,35 @@
      
     //利用$.ajax()方法傳送請求並取得回應
     // 使用jquery.ajax || $.ajax都可以
-    $.ajax(
-      {
-        url:'https://kktix.com/events.json',
-        type:'get',
-        success:function(response){   //成功後要做甚麼事情
-          console.log(response)
-          renderList(response)
-        },  
-        error:function(err){
-          console.log(err)
-        },
-        complete:function(xhr,status){
-          console.log("status:"+status)
-        },
-      }
-    ) 
+    // $.ajax(
+    //   {
+    //     url:'https://kktix.com/events.json',
+    //     type:'get',
+    //     success:function(response){   //成功後要做甚麼事情
+    //       console.log(response)
+    //       renderList(response)
+    //     },  
+    //     error:function(err){
+    //       console.log(err)
+    //     },
+    //     complete:function(xhr,status){
+    //       console.log("status:"+status)
+    //     },
+    //   }
+    // ) 
+
+/****精簡版****/
+//  $.get('https://kktix.com/events.json',function(response){
+//   console.log(response)
+//   renderList(response)
+//  })
+
+/****極度簡版****/
+$("ul").load('https://kktix.com/events.json',function(response){
+  console.log(response)
+})
+
+
 
     function renderList(response){
         document.querySelector(".title").innerHTML=response.title;       //取得response內的title
