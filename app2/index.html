@@ -177,10 +177,27 @@ function del(id){
 }
 
 
+
 //////////////////////取消功能//////////////////////
 
 function cancel(){
   document.querySelector(".edit-form").innerHTML="";
   document.querySelector(".add-form").innerHTML="";
+}
+
+
+//////////////////////智彗查詢提示功能//////////////////////
+
+/* document.addEventListener('input',function(){
+  ai();
+}) */
+
+$("#query").on("input",()=>{ai()})
+
+function ai(){
+  let str=document.querySelector("#query").value;
+  $.get("api/query.php",{str},function(res){
+      document.querySelector(".query-result").innerHTML=res
+  })
 }
 </script>
