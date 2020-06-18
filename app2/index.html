@@ -15,7 +15,7 @@
 <body>
   <h1 class="header">學生資料管理系統</h1>
   <div class="ff">
-    <input type="button" value="新增" onclick="document.getElementById('create').style.display=''">
+    <button onclick="openInsert()">新增</button>  
    <div class="query">
       <!---用來顯示班級清單的選單--->
     <select name="classes" id="classes" onchange="getStudents(this.value)">
@@ -24,35 +24,19 @@
 
     <!--用來存放編輯表單的區塊-->
     <div class="edit-form"></div>
+    
+    <!--用來存放新增表單的區塊-->
+    <div class="add-form"></div>
 
     <!--用來存放查詢結果的區塊-->
     <div class="query-result"></div>
 
-     <!--用來存放學生資料的區塊-->
+    <!--用來存放學生資料的區塊-->
     <div class="students"></div>
-  </div>
-    <input type="button" value="編輯">
-    <input type="button" value="刪除">
-  </div>
-  <div style="display:none"  id="create" class="create">
-    <h3>新增學生資料</h3>
-    <form action="api/insert.php" method="post">
-    <ul>
-      <li>姓名：<input type="text" name="name" id="name"></li>
-        <li>學號：<input type="text" name="uni_id" id="uni_id"></li>
-        <li>班級座號：<input type="text" name="class_num" id="class_num"></li>
-        <li>出生年月日：<input type="text" name="birthday" id="birthday"></li>
-        <li>身份證字號：<input type="text" name="nat_id" id="nat_id"></li>
-        <li>住址：<input type="text" name="addr" id="addr"></li>
-        <li>父母：<input type="text" name="parent" id="parent"></li>
-        <li>電話：<input type="text" name="tel" id="tel"></li>
-        <li>科別：<input type="text" name="dept" id="dept"></li>
-        <li>畢業國中：<input type="text" name="grad_at" id="grad_at"></li>
-    </ul>
-    <div><input type="button" value="確定新增" onclick="create()"></div>  
-    </form>
-  </div>
-<!-- 編輯資料用的表單 -->
+
+    <!-- 新增資料用的表單 -->
+  
+    <!-- 編輯資料用的表單 -->
 
   
 </body>
@@ -100,7 +84,11 @@ function create(){
 
 //顯示新增資料的表單
 function openInsert(){
-  document.querySelector("#insertBlock").style.display='block';
+  //document.querySelector("#insertBlock").style.display='block';
+  $.get("api/add_form.php",function(form){
+    document.querySelector(".add-form").innerHTML=form;
+    document.querySelector(".edit-form").innerHTML="";
+  })
 }
 
 //////////////////////查詢資料的函式//////////////////////
@@ -115,9 +103,9 @@ function getClasses(){
 
 //用ajax向後端api程式要求指定班級的學生並顯示在指定的區塊中
 function getStudents(_class){
-  console.log(_class)
+  // console.log(_class)
   $.get("api/get_students.php",{'class':_class},function(students){
-    console.log(students)
+    // console.log(students)
     document.querySelector(".students").innerHTML=students
   })
 }
@@ -135,12 +123,41 @@ function query(){
 
 // 先拿到資料表單
 function getUpdateForm(id){
-  $.post("api./edit.php",{id},function(form){
+  $.get("api./edit.php",{id},function(form){
     document.querySelector(".edit-form").innerHTML=form;
+    // 清空add-form
+    document.querySelector(".add-form").innerHTML="";
   })
 }
 function update(){
-
+  // 取得所有要新增到資料庫的欄位
+  // 視form_data為一個物件,並將內部的值作為一併的宣告
+  let form_data={};
+  form_data['name']=document.querySelector("#name").value
+  form_data['uni_id']=document.querySelector("#uni_id").value
+  form_data['class_num']=document.querySelector("#class_num").value
+  form_data['birthday']=document.querySelector("#birthday").value
+  form_data['nat_id']=document.querySelector("#nat_id").value
+  form_data['addr']=document.querySelector("#addr").value
+  form_data['parent']=document.querySelector("#parent").value
+  form_data['tel']=document.querySelector("#tel").value
+  form_data['dept']=document.querySelector("#dept").value
+  form_data['grad_at']=document.querySelector("#grad_at").value
+  form_data['id']=document.querySelector("#id").value
+  console.log(form_data);
+  $.post("api/update.php",form_data,function(res){
+    if(res=='1'){
+      alert("更新成功");
+      // 重新整理班級學員
+      let nowClass=document.querySelector("#classes").value
+      getStudents(nowClass);
+      // 並且把edit-form清空
+      document.querySelector(".edit-form").innerHTML="";
+    }else{
+      // 如果沒有更新可能也會顯示更新失敗
+      alert("更新失敗");
+    }
+})
 }
 
 //////////////////////刪除資料的函式//////////////////////
@@ -159,4 +176,11 @@ function del(id){
   })
 }
 
+
+//////////////////////取消功能//////////////////////
+
+function cancel(){
+  document.querySelector(".edit-form").innerHTML="";
+  document.querySelector(".add-form").innerHTML="";
+}
 </script>

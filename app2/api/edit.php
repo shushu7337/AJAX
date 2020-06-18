@@ -20,7 +20,11 @@
         <li>電話：<input type="text" name="tel" id="tel" value="<?=$row['tel'];?>"></li>
         <li>科別：<input type="text" name="dept" id="dept" value="<?=$row['dept'];?>"></li>
         <li>畢業國中：<input type="text" name="grad_at" id="grad_at" value="<?=$row['grad_at'];?>"></li>
+        <li><input type="hidden" name="id" id="id" value="<?=$row['id'];?>"></li>
     </ul>
-    <div><input type="button" value="確定新增" onclick="student()"></div>  
+    <div>
+      <input type="button" value="確定修改" onclick="update()">
+      <input type="button" value="取消修改" onclick="cancel()">
+    </div>  
     </form>
   </div>

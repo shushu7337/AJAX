@@ -151,6 +151,7 @@ class DB
 
         //執行sql語句，此處的回傳值為語句影響的筆數，
         //大於1表示新增了至少1筆資料或至少更新了一筆資料
+        // echo $sql;
         return $this->pdo->exec($sql);
     }
 
