@@ -10,7 +10,20 @@ $db=new DB("students");
 $query=$db->all([]," where name like '%$str%'");
 
 //利用迴圈來列出查詢到的資料並加上需要的html標籤或其它內容
+// 不要多餘的空白或符號存在
+$data=[];
+
 foreach($query as $q){
-    echo "<div>結果一:".$q['name']."-".$q['class_num']."-".$q['dept']."</div>";
+    $data[]=[
+        '_id' => $q['id'],
+        '學號' => $q['uni_id'],
+        '班級座號' => mb_substr($q['class_num'],3,2),
+        '班級' => mb_substr($q['class_num'],0,3),
+        '姓名' => $q['name'],
+        '畢業國中' => mb_substr($q['grad_at'],0,mb_strlen($q['grad_at'])-2,'utf8'),
+        '科別' => $q['dept']
+    ];
 }
+
+echo json_encode($data);
 ?>
